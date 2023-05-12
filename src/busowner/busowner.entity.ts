@@ -22,6 +22,12 @@ export class busownerEntity
     @Column()
     address: string;
 
+    @Column({default: 0})
+    account: number;
+
+    @Column({default: "No license"})
+    brtalicense: string;
+
     @ManyToOne(()=>employeeEntity, (employeeEntity)=>employeeEntity.busowners)
     employee: employeeEntity
 }

@@ -12,9 +12,7 @@ import { customerEntity } from 'src/customer/customer.entity';
 
 @Module({
     imports: [TypeOrmModule.forFeature([employeeEntity, busownerEntity, customerEntity])],
-    controllers: [
-        EmployeeController,],
-    providers: [
-        EmployeeService,],
+    controllers: [EmployeeController,],
+    providers: [EmployeeService,],
 })
 export class EmployeeModule { }

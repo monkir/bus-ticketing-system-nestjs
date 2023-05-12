@@ -7,7 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { busownerEntity } from 'src/busowner/busowner.entity';
 import { customerEntity } from 'src/customer/customer.entity';
-import { ForbiddenTransactionModeOverrideError, Repository } from 'typeorm';
+import { ForbiddenTransactionModeOverrideError, Like, Repository } from 'typeorm';
 import { employeeEntity } from './employee.entity';
 import * as bcrypt from 'bcrypt';
 import { randomInt } from 'crypto';
@@ -35,12 +35,11 @@ export class EmployeeService {
         signupDTO.password=hash;
         try{
             return this.empRepo.insert(signupDTO)
-        }catch(e){
+        }
+        catch(e){
             console.log(e);
             return {message: "error"};
         }
-        
-
     }
     async login(loginDTO):Promise<any>
     { 
@@ -53,17 +52,17 @@ export class EmployeeService {
     async EmpgetIDbyEmail(email):Promise<string>
     { 
         const tableData= await this.empRepo.findOneBy({email: email})
-       return tableData.id.toString()
+        return tableData.id.toString()
     }
     async CustgetIDbyEmail(email):Promise<string>
     { 
         const tableData= await this.custRepo.findOneBy({email: email})
-       return tableData.id.toString()
+        return tableData.id.toString()
     }
-    showcustomers():any
+    async showcustomers():Promise<any>
     {
         //return "employee trying to find customer with id: "+findCustomerDto.id;
-        return this.custRepo.find()
+        return await this.custRepo.find()
     }
     showbusowners():any
     {
@@ -86,8 +85,8 @@ export class EmployeeService {
         const charactersLength = characters.length;
         let counter = 0;
         while (counter < length) {
-          result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          counter += 1;
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            counter += 1;
         }
         console.log("Password: "+result);
         return result;
@@ -159,7 +158,7 @@ export class EmployeeService {
         // return "Employee is adding a bus owner with name: "+addbusownerDTO.name
         // +" brta-license: "+addbusownerDTO.brtalicense
         const pass = this.makepass(8)
-       const salt = await bcrypt.genSalt();
+        const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(pass,salt);
         addbusownerDTO.password=hash;
         return this.busRepo.insert(addbusownerDTO)
@@ -179,5 +178,19 @@ export class EmployeeService {
             subject: 'Bus Ticketing System',
             text: 'Welcome to Bus Ticketing System'
         })
+    }
+    async searchCustomer(search):Promise<any>{
+        search="%"+search+"%";
+        return await this.custRepo.find({
+            where:
+            [
+                {name: Like(search)},
+                {email: Like(search)},
+                {phone: Like(search)},
+                {address: Like(search)},
+            ]
+        }
+            );
+        // return await this.custRepo.find({where:{name: Like(search)}});
     }
 }

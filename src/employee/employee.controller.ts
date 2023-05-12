@@ -63,9 +63,9 @@ export class EmployeeController {
     //find customer
     @Get("showcustomers")
     @UseGuards(sessionGuard)
-    showcustomes():any
+    async showcustomes():Promise<any>
     {
-        return this.employeeService.showcustomers();
+        return await this.employeeService.showcustomers();
     }
     //find customer
     @Get("findcustomer/:id")
@@ -73,6 +73,11 @@ export class EmployeeController {
     findcustomer(@Param() findCustomerDto: findcustomerForm):any
     {
         return this.employeeService.findcustomer(findCustomerDto);
+    }
+    @Get('searchcustomer/:search')
+    async searchcustomer(@Param('search') search:string)
+    {
+        return await this.employeeService.searchCustomer(search);
     }
 
     
