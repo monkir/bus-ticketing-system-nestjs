@@ -5,7 +5,7 @@ https://docs.nestjs.com/controllers#controllers
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes,Session, ValidationPipe, UnauthorizedException, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, Res } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { addbusownerForm, addCustomerForm, deleteCustomerForm, findbusownerForm, findcustomerForm, loginForm, signupForm, updatebusownerForm, updateCustomerForm } from './employee.dto';
+import { addbusownerForm, addCustomerForm, addPosterForm, deleteCustomerForm, deletePosterForm, findbusownerForm, findcustomerForm, loginForm, searchPosterForm, signupForm, updatebusownerForm, updateCustomerForm, updatePosterForm } from './employee.dto';
 import { sessionGuard } from './employee.guard';
 import { EmployeeService } from './employee.service';
 
@@ -206,6 +206,70 @@ export class EmployeeController {
         } catch(err) {
             res.sendFile("image-not-found.png",{ root: './uploads' });
         }
-      
+    }
+    // getting poster
+    @Get('showposters')
+    showposters(){
+        return this.employeeService.showposter();
+    }
+    // adding a poster 
+    @Post('addposter')
+    @UseInterceptors(FileInterceptor('image',{
+        storage:diskStorage({
+            destination: './uploads',
+            filename: function (req, file, cb) {
+                cb(null,Date.now()+file.originalname)
+            }
+        })
+    }))
+    @UsePipes(new ValidationPipe())
+    async addposter(
+        @Body() addPosterDTO: addPosterForm,
+        @UploadedFile(  new ParseFilePipe({
+            validators: [
+            new MaxFileSizeValidator({ maxSize: 160000 }),
+            new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
+            ],
+        }),) file: Express.Multer.File
+    )
+    {
+        addPosterDTO.image=file.filename;
+        return this.employeeService.addposter(addPosterDTO);
+    }
+    //deleting a poster
+    @Delete('deleteposter/:id')
+    @UsePipes(new ValidationPipe())
+    async deleteposter(@Param() deletePosterDTO: deletePosterForm){
+        return this.employeeService.deleteposter(deletePosterDTO)
+    }
+    //searching a poster
+    @Get('searchposter/:id')
+    @UsePipes(new ValidationPipe())
+    async searchposter(@Param() searchPosterDTO: searchPosterForm){
+        return this.employeeService.searchposter(searchPosterDTO)
+    }
+    //updating a poster
+    @Put('updateposter')
+    @UseInterceptors(FileInterceptor('image',{
+        storage:diskStorage({
+            destination: './uploads',
+            filename: function (req, file, cb) {
+                cb(null,Date.now()+file.originalname)
+            }
+        })
+    }))
+    @UsePipes(new ValidationPipe())
+    async updateposter(
+        @Body() updatePosterDTO: updatePosterForm,
+        @UploadedFile(  new ParseFilePipe({
+            validators: [
+            new MaxFileSizeValidator({ maxSize: 160000 }),
+            new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
+            ],
+        }),) file: Express.Multer.File
+    )
+    {
+        updatePosterDTO.image=file.filename;
+        return this.employeeService.updateposter(updatePosterDTO);
     }
 }

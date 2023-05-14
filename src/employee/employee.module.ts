@@ -9,9 +9,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { employeeEntity } from './employee.entity';
 import { busownerEntity } from 'src/busowner/busowner.entity';
 import { customerEntity } from 'src/customer/customer.entity';
+import { posterEntity } from 'src/others/poster.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([employeeEntity, busownerEntity, customerEntity])],
+    imports: [TypeOrmModule.forFeature([employeeEntity, busownerEntity, customerEntity, posterEntity])],
     controllers: [EmployeeController,],
     providers: [EmployeeService,],
 })

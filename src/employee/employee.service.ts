@@ -11,6 +11,7 @@ import { ForbiddenTransactionModeOverrideError, Like, Repository } from 'typeorm
 import { employeeEntity } from './employee.entity';
 import * as bcrypt from 'bcrypt';
 import { randomInt } from 'crypto';
+import { posterEntity } from 'src/others/poster.entity';
 
 @Injectable()
 export class EmployeeService {
@@ -21,6 +22,8 @@ export class EmployeeService {
         private busRepo: Repository<busownerEntity>,
         @InjectRepository(customerEntity)
         private custRepo: Repository<customerEntity>,
+        @InjectRepository(posterEntity)
+        private posterRepo: Repository<posterEntity>,
         private mailerService: MailerService
     ){}
     getIndex():any
@@ -192,5 +195,21 @@ export class EmployeeService {
         }
             );
         // return await this.custRepo.find({where:{name: Like(search)}});
+    }
+
+    async showposter(){
+        return await this.posterRepo.find();
+    }
+    async addposter(addPosterDTO){
+        return await this.posterRepo.insert(addPosterDTO);
+    }
+    async deleteposter(deletePosterDTO){
+        return await this.posterRepo.delete(deletePosterDTO.id);
+    }
+    async updateposter(updatePosterDTO){
+        return await this.posterRepo.update(updatePosterDTO.id, updatePosterDTO);
+    } 
+    async searchposter(searchPosterDTO){
+        return await this.posterRepo.findBy(searchPosterDTO.id);
     }
 }

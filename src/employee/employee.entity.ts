@@ -1,6 +1,7 @@
 import { busownerEntity } from "src/busowner/busowner.entity";
 import { customerEntity } from "src/customer/customer.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { posterEntity } from "src/others/poster.entity";
+import { Column, Entity, IsNull, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class employeeEntity
@@ -31,4 +32,8 @@ export class employeeEntity
 
     @OneToMany(()=>busownerEntity, (busownerEntity)=>busownerEntity.employee)
     busowners: busownerEntity[];
+    
+    // @Column({default: null})
+    @OneToMany(()=>posterEntity, (posterEntity)=>posterEntity.employee)
+    posters: posterEntity[];
 }

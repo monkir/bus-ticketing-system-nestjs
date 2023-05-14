@@ -6,12 +6,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { busownerModule } from './busowner/busowner.module';
 import { customerModule } from './customer/customer.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { othersModule } from './others/others.module';
 
 @Module({
   imports: [
     EmployeeModule,
     busownerModule,
     customerModule,
+    othersModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsInt, Length, IsEmail, IsNumberString } from "class-validator";
+import { IsNotEmpty, IsInt, Length, IsEmail, IsNumberString, isNotEmpty, isNumberString } from "class-validator";
 
 export class signupForm 
 {
@@ -141,6 +141,31 @@ export class deletebusownerForm
 }
 export class deleteBusOwnerForm
 {
+    @IsNotEmpty()
+    @IsNumberString()
+    id: string;
+}
+export class addPosterForm{
+    // @IsNotEmpty()
+    // @IsNumberString()
+    image: string;
+}
+export class searchPosterForm{
+    // @IsNotEmpty()
+    // @IsNumberString()
+    image: string;
+}
+export class updatePosterForm{
+    @IsNotEmpty()
+    @IsNumberString()
+    id: string;
+
+    // @IsNotEmpty()
+    // @IsNumberString()
+    image: string;
+
+}
+export class deletePosterForm{
     @IsNotEmpty()
     @IsNumberString()
     id: string;
