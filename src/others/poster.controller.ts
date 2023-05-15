@@ -7,7 +7,7 @@ export class posterController
     constructor (private posterService: PosterService){}
     
     @Get('showposters')
-    showposter(){
-        return this.posterService.showposter();
+    async showposter(){
+        return await this.posterService.showposter();
     }
 }

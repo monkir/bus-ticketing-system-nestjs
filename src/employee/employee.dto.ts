@@ -128,6 +128,20 @@ export class updatebusownerForm
 
     @IsNotEmpty()
     name: string;
+    
+    @IsNotEmpty()
+    @IsEmail()
+    email: string;
+
+    @IsNotEmpty()
+    @IsNumberString()
+    phone: string;
+
+    @IsNotEmpty()
+    address: string;
+
+    @IsNotEmpty()
+    account: number;
 
     @IsNotEmpty()
     brtalicense: string;

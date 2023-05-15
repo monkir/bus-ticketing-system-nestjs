@@ -44,6 +44,10 @@ export class EmployeeService {
             return {message: "error"};
         }
     }
+    async getDataByEmpEmail(email)
+    {
+        return await this.empRepo.findOneBy({email:email});
+    }
     async login(loginDTO):Promise<any>
     { 
        if(await this.empRepo.count({where: {email: loginDTO.email}})==0){
@@ -100,27 +104,13 @@ export class EmployeeService {
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(pass,salt);
         addCustomerDTO.password=hash;
-        // await this.mailerService.sendMail({
-        //     to: addCustomerDTO.email,
-        //     subject: 'Password of your account in Bus Ticketing System',
-        //     text: 'Welcome to Bus Ticketing System\n'+
-        //         'Your account is: '+addCustomerDTO.email+'\n'+
-        //         'Your password is: '+pass+
-        //         'Your name is: '+addCustomerDTO.name+
-        //         'Your phone is: '+addCustomerDTO.phone+
-        //         'Your address is: '+addCustomerDTO.address+
-        //         'Your employee is: '+addCustomerDTO.employee
-        // })
         try{
-            console.log("e");
             return {
                 message: "success",
                 rowdata: await this.custRepo.insert(addCustomerDTO)
             }
         }
         catch(e){
-            console.log("22");
-            console.log(e);
             return {
                 message: "failed",
                 error: e.detail
@@ -168,7 +158,7 @@ export class EmployeeService {
     }
     updatebusowner(updatebusownerDTO):any
     {
-        return this.custRepo.update(updatebusownerDTO.id, updatebusownerDTO)
+        return this.busRepo.update(updatebusownerDTO.id, updatebusownerDTO)
     }
     deletebusowner(deleteBusOwnerDTO):any
     {
@@ -201,7 +191,18 @@ export class EmployeeService {
         return await this.posterRepo.find();
     }
     async addposter(addPosterDTO){
-        return await this.posterRepo.insert(addPosterDTO);
+        try{
+            return {
+                message: "success",
+                rowdata: await this.posterRepo.insert(addPosterDTO)
+            }
+        }
+        catch(e){
+            return {
+                message: "failed",
+                error: e.detail
+            }
+        }
     }
     async deleteposter(deletePosterDTO){
         return await this.posterRepo.delete(deletePosterDTO.id);

@@ -52,7 +52,8 @@ export class EmployeeController {
             session.email = loginDTO.email;
             session.userid=(await this.employeeService.EmpgetIDbyEmail(loginDTO.email)).toString()
             session.user='admin'
-            return {message: 'success'};
+            const tableData=await this.employeeService.getDataByEmpEmail(loginDTO.email);
+            return {message: 'success',name: tableData.name, image: tableData.filename};
         }
         else
         {
@@ -114,7 +115,7 @@ export class EmployeeController {
     addcustomer(@Body() addCustomerDTO: addCustomerForm, @Session() session,
     @UploadedFile(  new ParseFilePipe({
         validators: [
-        new MaxFileSizeValidator({ maxSize: 160000 }),
+        new MaxFileSizeValidator({ maxSize: 16000000 }),
         new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
         ],
     }),) file: Express.Multer.File):any
@@ -227,7 +228,7 @@ export class EmployeeController {
         @Body() addPosterDTO: addPosterForm,
         @UploadedFile(  new ParseFilePipe({
             validators: [
-            new MaxFileSizeValidator({ maxSize: 160000 }),
+            new MaxFileSizeValidator({ maxSize: 16000000 }),
             new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
             ],
         }),) file: Express.Multer.File
