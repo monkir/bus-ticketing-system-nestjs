@@ -3,7 +3,7 @@ https://docs.nestjs.com/providers#services
 */
 
 import { MailerModule, MailerService } from '@nestjs-modules/mailer/dist';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { busownerEntity } from 'src/busowner/busowner.entity';
 import { customerEntity } from 'src/customer/customer.entity';
@@ -12,6 +12,7 @@ import { employeeEntity } from './employee.entity';
 import * as bcrypt from 'bcrypt';
 import { randomInt } from 'crypto';
 import { posterEntity } from 'src/others/poster.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class EmployeeService {
@@ -24,7 +25,8 @@ export class EmployeeService {
         private custRepo: Repository<customerEntity>,
         @InjectRepository(posterEntity)
         private posterRepo: Repository<posterEntity>,
-        private mailerService: MailerService
+        private mailerService: MailerService,
+        private jwtService: JwtService
     ){}
     getIndex():any
     {
@@ -50,11 +52,27 @@ export class EmployeeService {
     }
     async login(loginDTO):Promise<any>
     { 
-       if(await this.empRepo.count({where: {email: loginDTO.email}})==0){
-        return false;
-       }
-       const tableData= await this.empRepo.findOneBy({email: loginDTO.email})
-       return bcrypt.compare(loginDTO.password, tableData.password)
+    //    if(await this.empRepo.count({where: {email: loginDTO.email}})==0){
+    //     return false;
+    //    }
+    //    const tableData= await this.empRepo.findOneBy({email: loginDTO.email})
+    //    return bcrypt.compare(loginDTO.password, tableData.password)
+        if(await this.empRepo.count({where: {email: loginDTO.email}})==0)
+        {
+        throw new UnauthorizedException;
+        }
+        const tableData= await this.empRepo.findOneBy({email: loginDTO.email})
+        if(!bcrypt.compare(loginDTO.password, tableData.password))
+        {
+            throw new UnauthorizedException;
+        }
+        const payload = { usertype: "employee", email: loginDTO.email };
+        return {
+            access_token: await this.jwtService.signAsync(payload),
+            email: tableData.email,
+            name: tableData.name,
+            image: tableData.filename
+        };
     }
     async EmpgetIDbyEmail(email):Promise<string>
     { 
