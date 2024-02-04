@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { randomInt } from 'crypto';
 import { posterEntity } from 'src/others/poster.entity';
 import { JwtService } from '@nestjs/jwt';
+import { addCustomerForm } from './employee.dto';
 
 @Injectable()
 export class EmployeeService {

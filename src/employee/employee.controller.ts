@@ -114,7 +114,8 @@ export class EmployeeController {
                 new MaxFileSizeValidator({ maxSize: 16000000 }),
                 new FileTypeValidator({ fileType: 'png|jpg|jpeg|' }),
             ],
-        }),) file: Express.Multer.File): any {
+        }),) file: Express.Multer.File
+    ): any {
         addCustomerDTO.profile = file.filename;
         addCustomerDTO.employee = session.userid
         return this.employeeService.addcustomer(addCustomerDTO);
