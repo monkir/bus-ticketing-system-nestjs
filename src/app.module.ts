@@ -8,6 +8,7 @@ import { customerModule } from './customer/customer.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { othersModule } from './others/others.module';
 import { ConfigModule } from '@nestjs/config';
+import { BtmsDbConfig } from './BtmsDbConfig';
 
 @Module({
   imports: [
@@ -16,16 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     busownerModule,
     customerModule,
     othersModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DATABASE_HOST,
-      port: 5432,
-      username: process.env.DATABASE_USERNAME,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_DATABSE,
-      autoLoadEntities: true,
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(BtmsDbConfig),
     MailerModule.forRoot({
       transport: {
         host: process.env.SMTP_HOST,
