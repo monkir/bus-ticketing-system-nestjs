@@ -23,14 +23,14 @@ export class EmployeeController {
     }
     @Post('signup')
     @UsePipes(new ValidationPipe())
-    @UseInterceptors(FileInterceptor('profile', {
-        storage: diskStorage({
-            destination: './uploads',
-            filename: function (req, file, cb) {
-                cb(null, Date.now() + file.originalname)
-            }
-        })
-    }))
+    // @UseInterceptors(FileInterceptor('profile', {
+    //     storage: diskStorage({
+    //         destination: './uploads',
+    //         filename: function (req, file, cb) {
+    //             cb(null, Date.now() + file.originalname)
+    //         }
+    //     })
+    // }))
     signup(
         @Body() signupDTO: signupForm,
         @UploadedFile(new ParseFilePipe({
@@ -98,14 +98,14 @@ export class EmployeeController {
     @Post('addcustomer')
     // @UseGuards(AuthGuard)
     @UseGuards(AuthGuard)
-    @UseInterceptors(FileInterceptor('profile', {
-        storage: diskStorage({
-            destination: './uploads',
-            filename: function (req, file, cb) {
-                cb(null, Date.now() + file.originalname)
-            }
-        })
-    }))
+    // @UseInterceptors(FileInterceptor('profile', {
+    //     storage: diskStorage({
+    //         destination: './uploads',
+    //         filename: function (req, file, cb) {
+    //             cb(null, Date.now() + file.originalname)
+    //         }
+    //     })
+    // }))
     @UsePipes(new ValidationPipe())
     @UseGuards(AuthGuard)
     addcustomer(@Body() addCustomerDTO: addCustomerForm, @Session() session,
@@ -205,14 +205,14 @@ export class EmployeeController {
     }
     // adding a poster 
     @Post('addposter')
-    @UseInterceptors(FileInterceptor('image', {
-        storage: diskStorage({
-            destination: './uploads',
-            filename: function (req, file, cb) {
-                cb(null, Date.now() + file.originalname)
-            }
-        })
-    }))
+    // @UseInterceptors(FileInterceptor('image', {
+    //     storage: diskStorage({
+    //         destination: './uploads',
+    //         filename: function (req, file, cb) {
+    //             cb(null, Date.now() + file.originalname)
+    //         }
+    //     })
+    // }))
     @UsePipes(new ValidationPipe())
     async addposter(
         @Body() addPosterDTO: addPosterForm,
@@ -240,14 +240,14 @@ export class EmployeeController {
     }
     //updating a poster
     @Put('updateposter')
-    @UseInterceptors(FileInterceptor('image', {
-        storage: diskStorage({
-            destination: './uploads',
-            filename: function (req, file, cb) {
-                cb(null, Date.now() + file.originalname)
-            }
-        })
-    }))
+    // @UseInterceptors(FileInterceptor('image', {
+    //     storage: diskStorage({
+    //         destination: './uploads',
+    //         filename: function (req, file, cb) {
+    //             cb(null, Date.now() + file.originalname)
+    //         }
+    //     })
+    // }))
     @UsePipes(new ValidationPipe())
     async updateposter(
         @Body() updatePosterDTO: updatePosterForm,
